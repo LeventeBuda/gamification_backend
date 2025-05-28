@@ -1,0 +1,82 @@
+# ==============================================================================
+# API Végpont Tesztek - Matek Játék Projekt
+# ==============================================================================
+# Ez a fájl HTTP kéréseket definiál a projekt backend API végpontjainak teszteléséhez.
+# Használható IntelliJ IDEA, WebStorm, VS Code (REST Client kiterjesztéssel) vagy más HTTP kliens eszközökkel.
+# ------------------------------------------------------------------------------
+
+### GET kérés egy nyilvános példa szerverhez (IntelliJ)
+# Cél: Annak ellenőrzése, hogy a HTTP kliens megfelelően működik-e egy egyszerű GET kéréssel.
+# Ez a kérés nem része a Matek Játék projekt API-jának, csak egy általános teszt.
+# A `?generated-in=WebStorm` egy lekérdezési paraméter, ami metaadatot küld a kérésről.
+GET https://examples.http-client.intellij.net/get?generated-in=WebStorm
+
+###
+# A `###` szimbólum új HTTP kérés kezdetét jelöli.
+
+### Új felhasználó regisztrálása
+# Végpont: POST /api/auth/register
+# Cél: Új felhasználói fiók létrehozása a rendszerben.
+# A kérés törzsében JSON formátumban kell megadni a felhasználó adatait.
+POST http://localhost:5000/api/auth/register
+# Content-Type fejléc: Meghatározza, hogy a kérés törzse JSON adatokat tartalmaz.
+Content-Type: application/json
+
+# Kérés törzse (JSON payload):
+#   - username: A felhasználó választott neve (string, kötelező).
+#   - email: A felhasználó érvényes email címe (string, kötelező, egyedi).
+#   - password: A felhasználó jelszava (string, kötelező, ajánlott minimum hosszúság betartása).
+#   - avatar: Opcionális string az avatár kép URL-jéhez vagy egy emoji karakterhez. Ha üres, a backend alapértelmezett avatárt állíthat be.
+{
+  "username": "TesztElek",
+  "email": "tesztelek@example.com",
+  "password": "asd123",
+  "avatar": ""
+}
+# Megjegyzés: A "password": "asd123" egy gyenge jelszó, csak tesztelési célokra használatos.
+# Éles környezetben mindig erős, egyedi jelszavakat kell használni és a backendnek megfelelően kell kezelnie (pl. hashelés).
+
+###
+
+### Meglévő felhasználó bejelentkeztetése
+# Végpont: POST /api/auth/login
+# Cél: Regisztrált felhasználó authentikálása és bejelentkeztetése a rendszerbe.
+# Sikeres bejelentkezés esetén a válasz tartalmaz egy JWT tokent és a felhasználói adatokat.
+POST http://localhost:5000/api/auth/login
+# Content-Type fejléc: A kérés törzse JSON adatokat tartalmaz.
+Content-Type: application/json
+
+# Kérés törzse (JSON payload):
+#   - email: A bejelentkezni kívánó felhasználó email címe (string, kötelező).
+#   - password: A felhasználó jelszava (string, kötelező).
+{
+  "email": "tesztelek@example.com",
+  "password": "asd123"
+}
+
+###
+# ==============================================================================
+# További lehetséges API végpont tesztek (példaként):
+# ==============================================================================
+
+### Ranglista lekérdezése (GET)
+# Végpont: GET /api/scores/leaderboard
+# Cél: A legjobb eredmények listájának lekérése.
+# Paraméterek: Opcionálisan `limit` a megjelenítendő eredmények számának korlátozására.
+# GET http://localhost:5000/api/scores/leaderboard?limit=10
+
+###
+
+### Új pontszám beküldése (POST - Authentikációt igényel)
+# Végpont: POST /api/scores
+# Cél: Új játékeredmény mentése a bejelentkezett felhasználóhoz.
+# Authentikáció: Ehhez a kéréshez érvényes JWT token szükséges az 'Authorization' fejlécben.
+# POST http://localhost:5000/api/scores
+# Content-Type: application/json
+# Authorization: Bearer YOUR_JWT_TOKEN_HERE
+#
+# {
+#   "score": 1250
+# }
+
+###
